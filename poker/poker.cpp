@@ -19,40 +19,40 @@ public:
     void display() const {
         std::string rankStr = "";
         std::string suitStr = "";
-        
+
         switch (m_Rank) {
-            case ACE:
-                rankStr = "A";
-                break;
-            case JACK:
-                rankStr = "J";
-                break;
-            case QUEEN:
-                rankStr = "Q";
-                break;
-            case KING:
-                rankStr = "K";
-                break;
-            default:
-                rankStr = std::to_string(m_Rank);
-                break;
+        case ACE:
+            rankStr = "A";
+            break;
+        case JACK:
+            rankStr = "J";
+            break;
+        case QUEEN:
+            rankStr = "Q";
+            break;
+        case KING:
+            rankStr = "K";
+            break;
+        default:
+            rankStr = std::to_string(m_Rank);
+            break;
         }
-        
+
         switch (m_Suit) {
-            case CLUBS:
-                suitStr = "C";
-                break;
-            case DIAMONDS:
-                suitStr = "D";
-                break;
-            case HEARTS:
-                suitStr = "H";
-                break;
-            case SPADES:
-                suitStr = "S";
-                break;
+        case CLUBS:
+            suitStr = "C";
+            break;
+        case DIAMONDS:
+            suitStr = "D";
+            break;
+        case HEARTS:
+            suitStr = "H";
+            break;
+        case SPADES:
+            suitStr = "S";
+            break;
         }
-        
+
         std::cout << rankStr << suitStr << " ";
     }
 
@@ -65,36 +65,30 @@ private:
 class Deck {
 public:
     Deck() {
-        reset();
-    }
-        void shuffle() {
-        std::random_shuffle(m_Cards.begin(), m_Cards.end());
-    }
-
-    void reset()
-    {
-        m_Cards.clear();
         for (int suit = Card::CLUBS; suit <= Card::SPADES; ++suit) {
             for (int rank = Card::ACE; rank <= Card::KING; ++rank) {
                 m_Cards.push_back(Card(static_cast<Card::Rank>(rank), static_cast<Card::Suit>(suit)));
             }
         }
-        shuffle();
+    }
+
+    void shuffle() {
+        std::random_shuffle(m_Cards.begin(), m_Cards.end());
     }
 
     const Card& draw() {
         // Удаление карты из колоды
         const Card& card = m_Cards.back();
         m_Cards.pop_back();
-        
+
         return card;
     }
-  
+
     class iterator : public std::iterator<std::input_iterator_tag, Card> {
     public:
         iterator(std::vector<Card>::iterator it) : m_Iterator(it) {}
 
-         iterator operator+(int n) const {
+        iterator operator+(int n) const {
             iterator temp = *this;
             for (int i = 0; i < n; i++) {
                 ++temp; // Перемещаем итератор вперед
@@ -131,6 +125,29 @@ private:
     std::vector<Card> m_Cards;
 };
 
+// Определяем класс адаптера для итератора колоды карт
+class DeckIteratorAdapter {
+public:
+    DeckIteratorAdapter(Deck::iterator iterator) : m_Iterator(iterator) {}
+
+    DeckIteratorAdapter& operator++() {
+        ++m_Iterator;
+        return *this;
+    }
+
+    bool operator!=(const DeckIteratorAdapter& other) const {
+        return m_Iterator != other.m_Iterator;
+    }
+
+    const Card& operator*() const {
+        return *m_Iterator;
+    }
+
+private:
+    Deck::iterator m_Iterator;
+};
+
+
 // Функция подсчета очков игрока
 int calculatePoints(const std::vector<Card>& hand) {
     int points = 0;
@@ -153,9 +170,11 @@ int calculatePoints(const std::vector<Card>& hand) {
 void determineWinner(int player1Points, int player2Points) {
     if (player1Points > player2Points) {
         std::cout << "Player 1 wins!" << std::endl;
-    } else if (player2Points > player1Points) {
+    }
+    else if (player2Points > player1Points) {
         std::cout << "Player 2 wins!" << std::endl;
-    } else {
+    }
+    else {
         std::cout << "It's a tie!" << std::endl;
     }
 }
@@ -164,22 +183,22 @@ void determineWinner(int player1Points, int player2Points) {
 void playPoker() {
     Deck deck;
     deck.shuffle();
-    
+
     int handSize = 5;
 
     std::vector<Card> player1Hand;
     std::vector<Card> player2Hand;
 
- std::cout << "Player 1 cards: ";
+    std::cout << "Player 1 cards: ";
     for (Deck::iterator it = deck.begin(); it != deck.begin() + handSize; ++it) {
         const Card& card = *it;
         card.display();
         player1Hand.push_back(card);
     }
     std::cout << std::endl;
-    
+
     std::cout << "Player 2 cards: ";
-    for (Deck::iterator it = deck.begin() + handSize; it != deck.begin() + (2 * handSize); ++it) {
+    for (Deck::iterator it = deck.begin(); it != deck.begin() + (2*handSize); ++it) {
         const Card& card = *it;
         card.display();
         player2Hand.push_back(card);
