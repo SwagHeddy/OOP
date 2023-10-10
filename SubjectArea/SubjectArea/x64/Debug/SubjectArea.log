@@ -1,4 +1,0 @@
-﻿  SubjectArea.cpp
-C:\Users\matushkin.sv\source\repos\SubjectArea\SubjectArea\SubjectArea.cpp(8,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-C:\Users\matushkin.sv\source\repos\SubjectArea\SubjectArea\card.h(22): warning C4715: logic::WhoWin: значение возвращается не при всех путях выполнения
-  SubjectArea.vcxproj -> C:\Users\matushkin.sv\source\repos\SubjectArea\x64\Debug\SubjectArea.exe
