@@ -5,18 +5,20 @@
 #include <map>
 #include <random>
 
-// Определяем класс карты
+// Определяем класс карты. Карта состоит из двух полей: "Ранг/Rank", "Масть/Suit"
 class Card {
 public:
     enum Rank { ACE = 1, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING };
     enum Suit { CLUBS, DIAMONDS, HEARTS, SPADES };
 
-    Card(Rank rank = ACE, Suit suit = SPADES) : m_Rank(rank), m_Suit(suit) {}
+    Card(Rank rank = ACE, Suit suit = SPADES) : m_Rank(rank), m_Suit(suit) {} //конструтор карты, строим конечный объект.
 
+// Возвращает значение карты
     int getValue() const {
         return m_Rank;
     }
 
+// Вывод карты на экран
     void display() const {
         std::string rankStr = "";
         std::string suitStr = "";
@@ -62,10 +64,10 @@ private:
     Suit m_Suit;
 };
 
-// Определяем класс колоды карт
+// Определяем класс колоды карт. Он же и является контейнером всех этих объектов
 class Deck {
 public:
-    Deck() {
+    Deck() { // Конструктор колоды. Создаем все вариации карт
         for (int suit = Card::CLUBS; suit <= Card::SPADES; ++suit) {
             for (int rank = Card::ACE; rank <= Card::KING; ++rank) {
                 m_Cards.push_back(Card(static_cast<Card::Rank>(rank), static_cast<Card::Suit>(suit)));
@@ -73,6 +75,7 @@ public:
         }
     }
 
+// Процедура генерации уникальной колоды с каждым запуском программы
     void generateDeck() {
         std::random_device rd;
         std::mt19937 eng(rd());
@@ -87,7 +90,7 @@ public:
         return card;
     }
 
-    class iterator : public std::iterator<std::input_iterator_tag, Card> {
+    class iterator : public std::iterator<std::input_iterator_tag, Card> { 
     public:
         iterator(std::vector<Card>::iterator it) : m_Iterator(it) {}
 
