@@ -201,7 +201,7 @@ void playPoker() {
     std::cout << std::endl;
 
     std::cout << "Player 2 cards: ";
-    for (DeckIteratorAdapter it = deck.begin(); it != deck.begin() + (2 * handSize); ++it) {
+    for (DeckIteratorAdapter it = deck.begin() + handSize; it != deck.begin() + (2 * handSize); ++it) {
         const Card& card = *it;
         card.display();
         player2Hand.push_back(card);
